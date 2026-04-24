@@ -15,9 +15,9 @@ export function MenuItemCard({ item, index }: MenuItemCardProps) {
     if (n.includes('latte')) return 'https://images.unsplash.com/photo-1459755486867-b55449bb39ff?auto=format&fit=crop&w=600&q=80';
     if (n.includes('cappuccino')) return 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80';
     if (n.includes('mocha')) return 'https://images.unsplash.com/photo-1444418185997-1145ea024a9e?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('iced coffee')) return 'https://images.unsplash.com/photo-1517701604599-bb28b3e5081c?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('green tea') || n.includes('matcha')) return 'https://images.unsplash.com/photo-1523906630133-f75b5d134607?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('chai')) return 'https://images.unsplash.com/photo-1598908314732-0711390194b4?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('iced coffee')) return 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('green tea') || n.includes('matcha')) return 'https://images.unsplash.com/photo-1582718115501-92576cc09562?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('chai')) return 'https://images.unsplash.com/photo-1546421845-6471bdcf3edf?auto=format&fit=crop&w=600&q=80';
     if (n.includes('black tea')) return 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80';
     if (n.includes('herbal tea') || n.includes('tea')) return 'https://images.unsplash.com/photo-1594631252845-29fc4586c562?auto=format&fit=crop&w=600&q=80';
     if (n.includes('hot chocolate') || n.includes('cocoa')) return 'https://images.unsplash.com/photo-1544787210-2211d7c3bc9e?auto=format&fit=crop&w=600&q=80';
