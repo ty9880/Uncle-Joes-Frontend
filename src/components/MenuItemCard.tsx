@@ -14,13 +14,13 @@ export function MenuItemCard({ item, index }: MenuItemCardProps) {
     
     if (n.includes('latte')) return 'https://images.unsplash.com/photo-1459755486867-b55449bb39ff?auto=format&fit=crop&w=600&q=80';
     if (n.includes('cappuccino')) return 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('mocha')) return 'https://images.unsplash.com/photo-1444418185997-1145ea024a9e?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('iced coffee')) return 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('green tea') || n.includes('matcha')) return 'https://images.unsplash.com/photo-1582718115501-92576cc09562?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('mocha')) return 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('iced coffee')) return 'https://www.eatingbirdfood.com/wp-content/uploads/2025/06/iced-coffee-hero-new.jpg';
+    if (n.includes('green tea') || n.includes('matcha')) return 'https://roguecommunityhealth.org/wp-content/uploads/2024/09/benefits-green-tea-scaled.webp';
     if (n.includes('chai')) return 'https://images.unsplash.com/photo-1546421845-6471bdcf3edf?auto=format&fit=crop&w=600&q=80';
     if (n.includes('black tea')) return 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('herbal tea') || n.includes('tea')) return 'https://images.unsplash.com/photo-1594631252845-29fc4586c562?auto=format&fit=crop&w=600&q=80';
-    if (n.includes('hot chocolate') || n.includes('cocoa')) return 'https://images.unsplash.com/photo-1544787210-2211d7c3bc9e?auto=format&fit=crop&w=600&q=80';
+    if (n.includes('herbal tea') || n.includes('tea')) return 'https://www.botanicalinterests.com/community/blog/wp-content/uploads/2024/08/herbs-for-tea.jpg';
+    if (n.includes('hot chocolate') || n.includes('cocoa')) return 'https://www.allrecipes.com/thmb/lnb_004MI6wGuJXQ-uDxMUNZmQk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20211-creamy-hot-cocoa-DDMFS-4x3-ed6183b2bbb74bbba4a06a78e4d72350.jpg';
     if (n.includes('espresso')) return 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80';
     
     if (category.toLowerCase().includes('coffee')) return 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80';
