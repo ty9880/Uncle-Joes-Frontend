@@ -1,7 +1,7 @@
 import { LocationCard } from '../components/LocationCard';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLocations } from '../lib/api';
-import { MapPin, Navigation, Search, X } from 'lucide-react';
+import { MapPin, Navigation, Search, X, Filter, ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState, useMemo } from 'react';
 
@@ -12,20 +12,31 @@ export function Locations() {
   });
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedState, setSelectedState] = useState('');
+
+  const states = useMemo(() => {
+    const uniqueStates = Array.from(new Set(locations.map((loc) => loc.state)));
+    return uniqueStates.sort();
+  }, [locations]);
 
   const filteredLocations = useMemo(() => {
     return locations.filter((loc) => {
       const query = searchQuery.toLowerCase();
       // Safely handle zip_code (could be number or string from API)
       const zipCodeStr = loc.zip_code?.toString() || '';
-      return (
+      
+      const matchesSearch = searchQuery === '' || (
         loc.city.toLowerCase().includes(query) ||
         loc.state.toLowerCase().includes(query) ||
         zipCodeStr.toLowerCase().includes(query) ||
         loc.name.toLowerCase().includes(query)
       );
+
+      const matchesState = selectedState === '' || loc.state === selectedState;
+
+      return matchesSearch && matchesState;
     });
-  }, [locations, searchQuery]);
+  }, [locations, searchQuery, selectedState]);
 
   return (
     <div className="min-h-screen pb-32">
@@ -48,23 +59,42 @@ export function Locations() {
                 designed for focus, community, and comfort.
               </p>
               
-              <div className="relative group max-w-md">
-                <input
-                  type="text"
-                  placeholder="Search by city, state, or zip..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white border border-brand-brown/10 font-sans shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-olive/20 transition-all text-brand-brown"
-                />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-brown/30 group-focus-within:text-brand-olive transition-colors" size={20} />
-                {searchQuery && (
-                  <button 
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-brown/30 hover:text-brand-brown transition-colors"
+              <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
+                <div className="relative group flex-grow">
+                  <input
+                    type="text"
+                    placeholder="Search by city, state, or zip..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white border border-brand-brown/10 font-sans shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-olive/20 transition-all text-brand-brown"
+                  />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-brown/30 group-focus-within:text-brand-olive transition-colors" size={20} />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-brown/30 hover:text-brand-brown transition-colors"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="relative group min-w-[160px]">
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full h-14 pl-12 pr-10 rounded-2xl bg-white border border-brand-brown/10 font-sans shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-olive/20 transition-all text-brand-brown appearance-none cursor-pointer"
                   >
-                    <X size={18} />
-                  </button>
-                )}
+                    <option value="">All States</option>
+                    {states.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-brown/30 group-focus-within:text-brand-olive transition-colors pointer-events-none" size={18} />
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-brown/30 group-focus-within:text-brand-olive transition-colors pointer-events-none" size={18} />
+                </div>
               </div>
             </div>
           </div>
@@ -90,14 +120,17 @@ export function Locations() {
                 </div>
                 <h3 className="text-2xl font-semibold text-brand-brown mb-2">No locations found</h3>
                 <p className="text-brand-brown/60 font-sans font-light">
-                  We couldn't find any shops matching "{searchQuery}".<br />
-                  Try searching for a different city or zip code.
+                  We couldn't find any shops matching your criteria.<br />
+                  Try searching for a different city or clearing your filters.
                 </p>
                 <button 
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedState('');
+                  }}
                   className="mt-6 text-sm font-bold uppercase tracking-widest text-brand-olive hover:text-brand-brown transition-colors font-sans underline underline-offset-8"
                 >
-                  Show all locations
+                  Clear all filters
                 </button>
               </div>
             )}
