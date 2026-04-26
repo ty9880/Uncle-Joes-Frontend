@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Coffee, MapPin, Menu as MenuIcon, ShoppingBag } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
+import { useCart } from '../context/CartContext';
 
 const navItems = [
   { name: 'Home', href: '/', icon: Coffee },
@@ -11,6 +12,7 @@ const navItems = [
 
 export function Navbar() {
   const location = useLocation();
+  const { totalItems } = useCart();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-brand-brown/10 bg-brand-cream/80 backdrop-blur-md">
@@ -51,9 +53,17 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-brown/10 hover:bg-brand-brown/5 transition-colors">
+          <Link 
+            to="/cart"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-brand-brown/10 hover:bg-brand-brown/5 transition-colors"
+          >
             <ShoppingBag size={20} className="text-brand-brown" />
-          </button>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-olive text-[10px] font-bold text-white shadow-sm font-sans">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
     </nav>

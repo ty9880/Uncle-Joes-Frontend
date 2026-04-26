@@ -10,8 +10,11 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Menu } from './pages/Menu';
 import { Locations } from './pages/Locations';
+import { Cart } from './pages/Cart';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLocation } from 'react-router-dom';
+
+import { CartProvider } from './context/CartContext';
 
 const queryClient = new QueryClient();
 
@@ -31,6 +34,7 @@ function AnimatedRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/locations" element={<Locations />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -40,15 +44,17 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="flex min-h-screen flex-col">
-          <Navbar />
-          <main className="flex-grow">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+            <main className="flex-grow">
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
     </QueryClientProvider>
   );
 }

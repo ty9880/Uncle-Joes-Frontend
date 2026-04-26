@@ -1,6 +1,9 @@
-import { Plus } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 import { MenuItem } from '../lib/api';
 import { motion } from 'motion/react';
+import { useCart } from '../context/CartContext';
+import { useState } from 'react';
+import { cn } from '../lib/utils';
 
 export interface MenuItemCardProps {
   item: MenuItem;
@@ -9,6 +12,14 @@ export interface MenuItemCardProps {
 }
 
 export function MenuItemCard({ item, index }: MenuItemCardProps) {
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleAddToCart = () => {
+    addToCart(item);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
   const getItemImage = (name: string, category: string) => {
     const n = name.toLowerCase();
     
@@ -46,8 +57,14 @@ export function MenuItemCard({ item, index }: MenuItemCardProps) {
           referrerPolicy="no-referrer"
         />
         <div className="absolute bottom-3 right-3">
-          <button className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-brown text-white shadow-lg transition-transform hover:scale-110">
-            <Plus size={20} />
+          <button 
+            onClick={handleAddToCart}
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110",
+              added ? "bg-brand-olive text-white" : "bg-brand-brown text-white"
+            )}
+          >
+            {added ? <Check size={20} /> : <Plus size={20} />}
           </button>
         </div>
         <div className="absolute top-3 left-3">
