@@ -27,7 +27,6 @@ export function Locations() {
       
       const matchesSearch = searchQuery === '' || (
         loc.city.toLowerCase().includes(query) ||
-        loc.state.toLowerCase().includes(query) ||
         zipCodeStr.toLowerCase().includes(query) ||
         loc.name.toLowerCase().includes(query)
       );
@@ -63,7 +62,7 @@ export function Locations() {
                 <div className="relative group flex-grow">
                   <input
                     type="text"
-                    placeholder="Search by city, state, or zip..."
+                    placeholder="Search by city or zip..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white border border-brand-brown/10 font-sans shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-olive/20 transition-all text-brand-brown"

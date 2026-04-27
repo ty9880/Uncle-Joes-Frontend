@@ -6,6 +6,10 @@ import { motion } from 'motion/react';
 export function Cart() {
   const { cart, totalItems, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
 
+  const taxRate = 0.07;
+  const taxAmount = totalPrice * taxRate;
+  const finalTotal = totalPrice + taxAmount;
+
   if (cart.length === 0) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-6">
@@ -119,8 +123,8 @@ export function Cart() {
                   <span>${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center text-white/60 font-sans text-sm tracking-wide">
-                  <span>Tax</span>
-                  <span>Free</span>
+                  <span>Tax (7%)</span>
+                  <span>${taxAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center text-white/60 font-sans text-sm tracking-wide">
                   <span>Delivery</span>
@@ -130,7 +134,7 @@ export function Cart() {
 
               <div className="flex justify-between items-center mb-12 relative">
                 <span className="text-lg font-sans font-light opacity-80 uppercase tracking-widest">Total</span>
-                <span className="text-4xl font-sans font-bold">${totalPrice.toFixed(2)}</span>
+                <span className="text-4xl font-sans font-bold">${finalTotal.toFixed(2)}</span>
               </div>
 
               <button className="w-full bg-brand-cream text-brand-brown py-5 rounded-full text-xs font-bold uppercase tracking-[0.2em] transition-all hover:bg-brand-cream/90 hover:scale-[1.02] flex items-center justify-center gap-3 relative overflow-hidden group/btn">

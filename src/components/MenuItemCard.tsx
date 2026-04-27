@@ -1,4 +1,4 @@
-import { Plus, Check } from 'lucide-react';
+import { Plus, Check, Minus } from 'lucide-react';
 import { MenuItem } from '../lib/api';
 import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
@@ -12,13 +12,24 @@ export interface MenuItemCardProps {
 }
 
 export function MenuItemCard({ item, index }: MenuItemCardProps) {
-  const { addToCart } = useCart();
+  const { cart, addToCart, updateQuantity } = useCart();
   const [added, setAdded] = useState(false);
+
+  const cartItem = cart.find(i => i.id === item.id);
+  const quantity = cartItem?.quantity || 0;
 
   const handleAddToCart = () => {
     addToCart(item);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    if (quantity === 0) {
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    }
+  };
+
+  const handleRemoveOne = () => {
+    if (quantity > 0) {
+      updateQuantity(item.id, quantity - 1);
+    }
   };
   const getItemImage = (name: string, category: string) => {
     const n = name.toLowerCase();
@@ -57,15 +68,35 @@ export function MenuItemCard({ item, index }: MenuItemCardProps) {
           referrerPolicy="no-referrer"
         />
         <div className="absolute bottom-3 right-3">
-          <button 
-            onClick={handleAddToCart}
-            className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110",
-              added ? "bg-brand-olive text-white" : "bg-brand-brown text-white"
-            )}
-          >
-            {added ? <Check size={20} /> : <Plus size={20} />}
-          </button>
+          {quantity > 0 ? (
+            <div className="flex items-center gap-2 bg-brand-brown rounded-full p-1 shadow-lg transition-all border border-white/10">
+              <button 
+                onClick={handleRemoveOne}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-brand-brown hover:bg-brand-cream transition-colors"
+                aria-label="Remove one"
+              >
+                <Minus size={16} />
+              </button>
+              <span className="w-6 text-center font-bold text-white text-sm font-sans">{quantity}</span>
+              <button 
+                onClick={handleAddToCart}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-brand-brown hover:bg-brand-cream transition-colors"
+                aria-label="Add one"
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={handleAddToCart}
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110",
+                added ? "bg-brand-olive text-white" : "bg-brand-brown text-white"
+              )}
+            >
+              {added ? <Check size={20} /> : <Plus size={20} />}
+            </button>
+          )}
         </div>
         <div className="absolute top-3 left-3">
           <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-brown font-sans shadow-sm">
