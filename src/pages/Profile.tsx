@@ -91,15 +91,17 @@ export function Profile() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: orderIndex * 0.1 }}
-                    key={order.id} 
+                    key={`${order.id}-${orderIndex}`} 
                     className="bg-white border border-brand-brown/5 rounded-3xl p-8 hover:border-brand-brown/10 transition-colors shadow-sm"
                   >
                     <div className="flex justify-between items-start mb-6">
                       <div>
                         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 mb-1">
-                          <Calendar size={12} /> {new Date(order.date).toLocaleDateString()}
+                          <Calendar size={12} /> {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </div>
-                        <h4 className="text-sm font-mono text-brand-brown opacity-60">ID: {order.id.slice(0, 8)}...</h4>
+                        <h4 className="text-lg font-serif text-brand-brown">
+                          {order.city}, {order.state}
+                        </h4>
                       </div>
                       <div className="text-xl font-sans font-bold text-brand-olive">
                         ${order.total.toFixed(2)}
@@ -107,13 +109,15 @@ export function Profile() {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      {order.items.map((item) => (
-                        <div key={item.id} className="flex justify-between items-center text-sm font-sans">
+                      {order.items.map((item, itemIndex) => (
+                        <div key={`${item.order_id}-${itemIndex}`} className="flex justify-between items-center text-sm font-sans">
                           <div className="flex items-center gap-3">
                             <span className="w-6 h-6 flex items-center justify-center bg-brand-cream rounded-full text-[10px] font-bold text-brand-brown">
                               {item.quantity}
                             </span>
-                            <span className="text-brand-brown/80">{item.item_name}</span>
+                            <span className="text-brand-brown/80">
+                              {item.item_name}
+                            </span>
                           </div>
                           <span className="text-brand-brown/40">${(item.price * item.quantity).toFixed(2)}</span>
                         </div>

@@ -1,19 +1,22 @@
 const BASE_URL = 'https://coffee-club-api-672980247099.us-central1.run.app';
 
 export interface OrderItem {
-  id: string;
-  order_id: string;
-  member_id: string;
+  city: string;
   item_name: string;
+  order_date: string;
+  order_id: string;
+  order_total: number;
   price: number;
   quantity: number;
-  created_at: string;
+  state: string;
 }
 
 export interface Order {
   id: string;
   date: string;
   total: number;
+  city: string;
+  state: string;
   items: OrderItem[];
 }
 
@@ -60,13 +63,14 @@ export const coffeeClubApi = {
       if (!acc[item.order_id]) {
         acc[item.order_id] = {
           id: item.order_id,
-          date: item.created_at,
-          total: 0,
+          date: item.order_date,
+          total: item.order_total,
+          city: item.city,
+          state: item.state,
           items: [],
         };
       }
       acc[item.order_id].items.push(item);
-      acc[item.order_id].total += item.price * item.quantity;
       return acc;
     }, {} as Record<string, Order>);
 
