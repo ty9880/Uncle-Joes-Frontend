@@ -18,13 +18,29 @@ export interface Order {
 }
 
 export const coffeeClubApi = {
-  async login(email: string) {
+  async login(email: string, password: string) {
     const response = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: 'Coffee123!' }),
+      body: JSON.stringify({ email, password }),
     });
-    if (!response.ok) throw new Error('Login failed');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Login failed. Please check your credentials.');
+    }
+    return response.json(); // { id, email }
+  },
+
+  async register(email: string, name: string, password: string) {
+    const response = await fetch(`${BASE_URL}/members`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, password }),
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Account creation failed. This email might already be in use.');
+    }
     return response.json(); // { id, email }
   },
 
