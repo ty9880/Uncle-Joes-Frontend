@@ -39,9 +39,9 @@ export function Profile() {
           </div>
           <button 
             onClick={() => { logout(); navigate('/'); }}
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 hover:text-red-500 transition-colors"
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-red-600 hover:text-red-700 transition-colors"
           >
-            <LogOut size={16} /> Sign Out
+            <LogOut size={18} /> Sign Out
           </button>
         </div>
 

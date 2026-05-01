@@ -168,10 +168,15 @@ export function Locations() {
                 </div>
 
                 <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full px-10">
-                  <button className="w-full bg-brand-brown text-brand-cream py-4 rounded-full font-sans uppercase tracking-[0.2em] text-[10px] font-bold shadow-2xl flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-transform">
+                  <a 
+                    href="https://www.google.com/maps" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full bg-brand-brown text-brand-cream py-4 rounded-full font-sans uppercase tracking-[0.2em] text-[10px] font-bold shadow-2xl flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-transform text-center"
+                  >
                     <Navigation size={14} />
                     Find Nearest Shop
-                  </button>
+                  </a>
                 </div>
               </div>
 
