@@ -1,7 +1,8 @@
-import { Plus, Check, Minus } from 'lucide-react';
+import { Plus, Check, Minus, Heart } from 'lucide-react';
 import { MenuItem } from '../lib/api';
 import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 
@@ -13,10 +14,12 @@ export interface MenuItemCardProps {
 
 export function MenuItemCard({ item, index }: MenuItemCardProps) {
   const { cart, addToCart, updateQuantity } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const [added, setAdded] = useState(false);
 
   const cartItem = cart.find(i => i.id === item.id);
   const quantity = cartItem?.quantity || 0;
+  const favorited = isFavorite(item.id);
 
   const handleAddToCart = () => {
     addToCart(item);
@@ -103,6 +106,20 @@ export function MenuItemCard({ item, index }: MenuItemCardProps) {
             {item.category || 'Coffee'}
           </span>
         </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(item);
+          }}
+          className={cn(
+            "absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-full backdrop-blur-sm shadow-sm transition-all",
+            favorited 
+              ? "bg-red-500 text-white shadow-red-200" 
+              : "bg-white/80 text-brand-brown/40 hover:text-red-500"
+          )}
+        >
+          <Heart size={16} fill={favorited ? "currentColor" : "none"} />
+        </button>
       </div>
       
       <div className="flex flex-col gap-1 px-2 pb-2">

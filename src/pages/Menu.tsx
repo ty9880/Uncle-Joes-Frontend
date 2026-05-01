@@ -2,15 +2,18 @@ import { MenuItemCard } from '../components/MenuItemCard';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMenu } from '../lib/api';
 import { useState } from 'react';
-import { Search, SlidersHorizontal, Filter, ChevronDown, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Filter, ChevronDown, X, Heart } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useMemo } from 'react';
+import { useFavorites } from '../context/FavoritesContext';
 
 export function Menu() {
   const { data: menu = [], isLoading } = useQuery({
     queryKey: ['menu'],
     queryFn: fetchMenu,
   });
+
+  const { favorites } = useFavorites();
 
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,6 +86,27 @@ export function Menu() {
           </div>
         </div>
       </section>
+
+      {/* Favorites Section */}
+      {favorites.length > 0 && (
+        <div className="mx-auto max-w-7xl px-6 pt-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="h-10 w-10 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl">
+              <Heart size={20} fill="currentColor" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-serif text-brand-brown">Your Favorites</h2>
+              <p className="text-xs font-sans font-bold uppercase tracking-widest text-brand-brown/40">The brews you love most</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {favorites.map((item, index) => (
+              <MenuItemCard key={`fav-${item.id}`} item={item} index={index} />
+            ))}
+          </div>
+          <div className="mt-16 h-px bg-brand-brown/5 w-full" />
+        </div>
+      )}
 
       {/* Filter & Grid */}
       <div className="mx-auto max-w-7xl px-6 py-12">

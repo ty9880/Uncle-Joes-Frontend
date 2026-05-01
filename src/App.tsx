@@ -18,6 +18,7 @@ import { useLocation } from 'react-router-dom';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 
 const queryClient = new QueryClient();
 
@@ -50,17 +51,19 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <AnimatedRoutes />
-              </main>
-              <Footer />
-            </div>
-          </BrowserRouter>
-        </CartProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <div className="flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-grow">
+                  <AnimatedRoutes />
+                </main>
+                <Footer />
+              </div>
+            </BrowserRouter>
+          </CartProvider>
+        </FavoritesProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -1,10 +1,11 @@
 import { Hero } from '../components/Hero';
 import { MenuItemCard } from '../components/MenuItemCard';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMenu } from '../lib/api';
+import { fetchMenu, MenuItem } from '../lib/api';
 import { motion } from 'motion/react';
 import { ArrowRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 
 export function Home() {
   const { data: menu = [], isLoading } = useQuery({
@@ -12,7 +13,30 @@ export function Home() {
     queryFn: fetchMenu,
   });
 
-  const featuredItems = menu.slice(0, 3);
+  const featuredItems = useMemo(() => {
+    if (menu.length === 0) return [];
+    
+    const items: MenuItem[] = [];
+    
+    // 1. First one is good
+    if (menu[0]) {
+      items.push({ ...menu[0], size: 'small' });
+    }
+    
+    // 2. Uncle Joe's Mocha
+    const mocha = menu.find(m => m.name.toLowerCase().includes('mocha')) || (menu[1] ? { ...menu[1] } : null);
+    if (mocha) {
+      items.push({ ...mocha, name: "Uncle Joe's Mocha", size: 'small' });
+    }
+
+    // 3. Uncle Joe's Iced Coffee
+    const iced = menu.find(m => m.name.toLowerCase().includes('iced coffee')) || (menu[2] ? { ...menu[2] } : null);
+    if (iced) {
+      items.push({ ...iced, name: "Uncle Joe's Iced Coffee", size: 'small' });
+    }
+    
+    return items.slice(0, 3);
+  }, [menu]);
 
   return (
     <div className="flex flex-col gap-24 pb-24">
