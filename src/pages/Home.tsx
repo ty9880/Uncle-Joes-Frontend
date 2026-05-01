@@ -13,6 +13,22 @@ export function Home() {
     queryFn: fetchMenu,
   });
 
+  const greeting = useMemo(() => {
+    // Get current time in EST
+    const now = new Date();
+    const estDate = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      hour: 'numeric',
+      hour12: false,
+    }).formatToParts(now);
+    
+    const hour = parseInt(estDate.find(p => p.type === 'hour')?.value || '12', 10);
+    
+    if (hour >= 0 && hour < 11) return 'Good Morning!';
+    if (hour >= 11 && hour < 18) return 'Good Afternoon!';
+    return 'Good Evening!';
+  }, []);
+
   const featuredItems = useMemo(() => {
     if (menu.length === 0) return [];
     
@@ -40,6 +56,19 @@ export function Home() {
 
   return (
     <div className="flex flex-col gap-24 pb-24">
+      {/* Time-based Greeting */}
+      <div className="pt-24 px-6 mx-auto max-w-7xl w-full text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <h2 className="text-6xl md:text-8xl lg:text-9xl font-serif text-brand-brown tracking-tighter leading-none">
+            {greeting.split(' ')[0]} <span className="italic font-light text-brand-olive">{greeting.split(' ').slice(1).join(' ')}</span>
+          </h2>
+        </motion.div>
+      </div>
+
       <Hero />
 
       {/* Featured Section */}

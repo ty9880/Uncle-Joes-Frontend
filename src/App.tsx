@@ -50,7 +50,7 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
+        <AuthProvider>
         <FavoritesProvider>
           <CartProvider>
             <BrowserRouter>

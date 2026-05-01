@@ -58,7 +58,7 @@ export function Cart() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   key={item.id} 
-                  className="flex flex-col sm:flex-row items-center gap-8 p-6 bg-white rounded-3xl border border-brand-brown/5 hover:border-brand-brown/10 transition-colors"
+                  className="flex flex-col sm:flex-row items-center gap-8 p-6 bg-white rounded-3xl border border-brand-brown/5 hover:border-brand-brown/10 transition-colors shadow-sm"
                 >
                   <div className="w-24 h-24 shrink-0 rounded-2xl overflow-hidden bg-brand-cream">
                     <img 
