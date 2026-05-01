@@ -1,13 +1,21 @@
 import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { coffeeClubApi } from '../lib/coffeeClubApi';
+import { coffeeClubApi, Order } from '../lib/coffeeClubApi';
+import { fetchMenu } from '../lib/api';
+import { useCart } from '../context/CartContext';
 import { motion } from 'motion/react';
-import { LogOut, Award, Package, Calendar, Tag } from 'lucide-react';
+import { LogOut, Award, Package, Calendar, Tag, RefreshCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function Profile() {
   const { user, logout, isAuthenticated } = useAuth();
+  const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  const { data: menu = [] } = useQuery({
+    queryKey: ['menu'],
+    queryFn: fetchMenu,
+  });
 
   const { data: pointsData, isLoading: pointsLoading } = useQuery({
     queryKey: ['points', user?.id],
@@ -21,6 +29,18 @@ export function Profile() {
     enabled: !!user?.id,
   });
 
+  const handleReorder = (order: Order) => {
+    order.items.forEach(orderItem => {
+      // Find the corresponding menu item by name
+      const menuItem = menu.find(m => m.name === orderItem.item_name);
+      if (menuItem) {
+        addToCart(menuItem, orderItem.quantity);
+      }
+    });
+    // Navigate to cart or show visual feedback
+    // navigate('/menu'); // Optional: redirect to menu where cart might be visible
+  };
+
   if (!isAuthenticated) {
     navigate('/login');
     return null;
@@ -33,7 +53,7 @@ export function Profile() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 border-b border-brand-brown/5 pb-12">
           <div>
             <h1 className="text-6xl font-light tracking-tighter mb-2">
-              Hello, <span className="italic">Member</span>
+              Hello, <span className="italic">{user?.name ? user.name.split(' ')[0] : 'Member'}</span>
             </h1>
             <p className="text-brand-brown/40 font-sans tracking-wide uppercase text-xs">{user?.email}</p>
           </div>
@@ -103,8 +123,16 @@ export function Profile() {
                           {order.city}, {order.state}
                         </h4>
                       </div>
-                      <div className="text-xl font-sans font-bold text-brand-olive">
-                        ${order.total.toFixed(2)}
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="text-xl font-sans font-bold text-brand-olive">
+                          ${order.total.toFixed(2)}
+                        </div>
+                        <button 
+                          onClick={() => handleReorder(order)}
+                          className="flex items-center gap-2 px-4 py-2 bg-brand-brown text-brand-cream rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform"
+                        >
+                          <RefreshCcw size={12} /> Reorder
+                        </button>
                       </div>
                     </div>
 

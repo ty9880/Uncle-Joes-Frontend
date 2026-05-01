@@ -22,7 +22,7 @@ export function Login() {
 
     try {
       const data = await coffeeClubApi.login(email, password);
-      login(data.id, data.email);
+      login(data.id, data.email, data.name);
       navigate('/profile');
     } catch (err) {
       if (err instanceof Error) {
@@ -42,7 +42,7 @@ export function Login() {
 
     try {
       const data = await coffeeClubApi.register(email, name, password);
-      login(data.id, data.email);
+      login(data.id, data.email, data.name);
       navigate('/profile');
     } catch (err) {
       if (err instanceof Error) {
