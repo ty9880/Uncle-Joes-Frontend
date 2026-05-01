@@ -11,10 +11,13 @@ import { Home } from './pages/Home';
 import { Menu } from './pages/Menu';
 import { Locations } from './pages/Locations';
 import { Cart } from './pages/Cart';
+import { Login } from './pages/Login';
+import { Profile } from './pages/Profile';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLocation } from 'react-router-dom';
 
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient();
 
@@ -35,6 +38,8 @@ function AnimatedRoutes() {
           <Route path="/menu" element={<Menu />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -44,17 +49,19 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <BrowserRouter>
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            <main className="flex-grow">
-              <AnimatedRoutes />
-            </main>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                <AnimatedRoutes />
+              </main>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

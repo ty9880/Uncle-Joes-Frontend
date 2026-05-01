@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Coffee, MapPin, Menu as MenuIcon, ShoppingBag } from 'lucide-react';
+import { Coffee, MapPin, Menu as MenuIcon, ShoppingBag, User } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { name: 'Home', href: '/', icon: Coffee },
@@ -13,6 +14,7 @@ const navItems = [
 export function Navbar() {
   const location = useLocation();
   const { totalItems } = useCart();
+  const { isAuthenticated } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-brand-brown/10 bg-brand-cream/80 backdrop-blur-md">
@@ -53,6 +55,13 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <Link
+            to={isAuthenticated ? "/profile" : "/login"}
+            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-brown/60 hover:text-brand-olive transition-colors px-4 py-2 border border-brand-brown/10 rounded-full"
+          >
+            <User size={14} />
+            <span className="hidden sm:inline">{isAuthenticated ? 'Profile' : 'Club Login'}</span>
+          </Link>
           <Link 
             to="/cart"
             className="relative flex h-10 w-10 items-center justify-center rounded-full border border-brand-brown/10 hover:bg-brand-brown/5 transition-colors"
