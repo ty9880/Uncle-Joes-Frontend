@@ -117,7 +117,7 @@ export function Profile() {
                     <div className="flex justify-between items-start mb-6">
                       <div>
                         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 mb-1">
-                          <Calendar size={12} /> {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                          <Calendar size={12} /> {order.date ? new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Date TBD'}
                         </div>
                         <h4 className="text-lg font-serif text-brand-brown">
                           {order.city}, {order.state}
@@ -125,7 +125,7 @@ export function Profile() {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <div className="text-xl font-sans font-bold text-brand-olive">
-                          ${order.total.toFixed(2)}
+                          ${(Number(order.total) || 0).toFixed(2)}
                         </div>
                         <button 
                           onClick={() => handleReorder(order)}
@@ -145,6 +145,11 @@ export function Profile() {
                             </span>
                             <span className="text-brand-brown/80">
                               {item.item_name}
+                              {(item.size || (typeof order.order_size === 'string' ? order.order_size : null)) && (
+                                <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
+                                  ({item.size || order.order_size})
+                                </span>
+                              )}
                             </span>
                           </div>
                           <span className="text-brand-brown/40">${(item.price * item.quantity).toFixed(2)}</span>
