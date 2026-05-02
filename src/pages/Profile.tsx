@@ -31,8 +31,10 @@ export function Profile() {
 
   const handleReorder = (order: Order) => {
     order.items.forEach(orderItem => {
-      // Find the corresponding menu item by name
-      const menuItem = menu.find(m => m.name === orderItem.item_name);
+      const menuItem = menu.find(m => 
+        m.name === orderItem.item_name && 
+        Math.abs(m.price - orderItem.price) < 0.01
+      );
       if (menuItem) {
         addToCart(menuItem, orderItem.quantity);
       }
@@ -145,11 +147,19 @@ export function Profile() {
                             </span>
                             <span className="text-brand-brown/80">
                               {item.item_name}
-                              {(item.size || (typeof order.order_size === 'string' ? order.order_size : null)) && (
-                                <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
-                                  ({item.size || order.order_size})
-                                </span>
-                              )}
+                              {(() => {
+                                // Find size from menu by matching name and price
+                                const menuItem = menu.find(m => 
+                                  m.name === item.item_name && 
+                                  Math.abs(m.price - item.price) < 0.01
+                                );
+                                const size = menuItem?.size || item.size || (typeof order.order_size === 'string' ? order.order_size : null);
+                                return size ? (
+                                  <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
+                                    ({size})
+                                  </span>
+                                ) : null;
+                              })()}
                             </span>
                           </div>
                           <span className="text-brand-brown/40">${(item.price * item.quantity).toFixed(2)}</span>

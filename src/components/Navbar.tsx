@@ -57,9 +57,9 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <Link
             to={isAuthenticated ? "/profile" : "/login"}
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-brown/60 hover:text-brand-olive transition-colors px-4 py-2 border border-brand-brown/10 rounded-full"
+            className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-brand-brown/60 hover:text-brand-olive transition-colors px-5 py-2.5 border border-brand-brown/10 rounded-full"
           >
-            <User size={14} />
+            <User size={16} />
             <span className="hidden sm:inline">{isAuthenticated ? 'Profile' : 'Club Login'}</span>
           </Link>
           <Link 
