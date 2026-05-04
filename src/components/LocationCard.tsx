@@ -81,10 +81,7 @@ export function LocationCard({ location, index }: LocationCardProps) {
           </div>
         </div>
 
-        <div className="mt-6 md:mt-0 pt-4 flex items-center justify-between border-t border-brand-brown/5">
-          <span className="text-[10px] font-bold uppercase tracking-widest font-sans text-brand-olive">
-            Visit Today
-          </span>
+        <div className="mt-6 md:mt-0 pt-4 flex items-center justify-end border-t border-brand-brown/5">
           <button className="text-xs font-semibold underline underline-offset-4 text-brand-brown hover:text-brand-olive font-sans uppercase">
             Get Directions
           </button>

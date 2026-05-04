@@ -64,27 +64,28 @@ export async function fetchMenu(): Promise<MenuItem[]> {
   const flattened: MenuItem[] = [];
   
   rawMenu.forEach((item: any) => {
+    const itemName = item.item_name || item.name || 'Unknown Item';
     if (item.sizes && Array.isArray(item.sizes)) {
       item.sizes.forEach((sizeOption: any) => {
         flattened.push({
-          id: `${item.name}-${sizeOption.size}`.replace(/\s+/g, '-').toLowerCase(),
-          name: item.name,
+          id: `${itemName}-${sizeOption.size}`.replace(/\s+/g, '-').toLowerCase(),
+          name: itemName,
           price: sizeOption.price,
           size: sizeOption.size,
           category: (function() {
-            const n = item.name.toLowerCase();
+            const n = itemName.toLowerCase();
             if (n.includes('tea') || n.includes('chai')) return 'Tea';
             if (n.includes('chocolate') || n.includes('cocoa')) return 'Other';
             return 'Coffee';
           })(),
-          description: `Enjoy our signature ${item.name} in ${sizeOption.size} size.`
+          description: `Enjoy our signature ${itemName} in ${sizeOption.size} size.`
         });
       });
     } else {
       // Fallback for items without nested sizes if any
       flattened.push({
-        id: item.id || item.name.replace(/\s+/g, '-').toLowerCase(),
-        name: item.name,
+        id: item.id || itemName.replace(/\s+/g, '-').toLowerCase(),
+        name: itemName,
         price: item.price || 0,
         category: 'Other',
         ...item
