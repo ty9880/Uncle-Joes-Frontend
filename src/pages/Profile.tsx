@@ -148,17 +148,63 @@ export function Profile() {
                             <span className="text-brand-brown/80">
                               {item.item_name}
                               {(() => {
-                                // Find size from menu by matching name and price
+                                // 1. Try exact match in menu
                                 const menuItem = menu.find(m => 
                                   m.name === item.item_name && 
                                   Math.abs(m.price - item.price) < 0.01
                                 );
-                                const size = menuItem?.size || item.size || (typeof order.order_size === 'string' ? order.order_size : null);
-                                return size ? (
+                                if (menuItem?.size) return (
                                   <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
-                                    ({size})
+                                    ({menuItem.size})
                                   </span>
-                                ) : null;
+                                );
+
+                                // 2. Try identifying size from other variants of the same item in menu
+                                const variants = menu.filter(m => m.name === item.item_name);
+                                if (variants.length > 0) {
+                                  const sortedVariants = [...variants].sort((a, b) => a.price - b.price);
+                                  let closestIndex = 0;
+                                  let minDiff = Math.abs(item.price - sortedVariants[0].price);
+                                  
+                                  sortedVariants.forEach((v, idx) => {
+                                    const diff = Math.abs(item.price - v.price);
+                                    if (diff < minDiff) {
+                                      minDiff = diff;
+                                      closestIndex = idx;
+                                    }
+                                  });
+                                  
+                                  const closest = sortedVariants[closestIndex];
+                                  if (closest.size) return (
+                                    <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
+                                      ({closest.size})
+                                    </span>
+                                  );
+
+                                  // Guess based on rank
+                                  let guessed = 'Medium';
+                                  if (sortedVariants.length === 1) guessed = 'Regular';
+                                  else if (sortedVariants.length === 2) guessed = closestIndex === 0 ? 'Small' : 'Large';
+                                  else if (closestIndex === 0) guessed = 'Small';
+                                  else if (closestIndex === sortedVariants.length - 1) guessed = 'Large';
+                                  
+                                  return (
+                                    <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
+                                      ({guessed})
+                                    </span>
+                                  );
+                                }
+
+                                // 3. Fallback heuristics based on price
+                                let finalGuess = 'Medium';
+                                if (item.price < 3.60) finalGuess = 'Small';
+                                else if (item.price > 5.20) finalGuess = 'Large';
+
+                                return (
+                                  <span className="opacity-60 italic whitespace-nowrap ml-1 text-xs font-light">
+                                    ({finalGuess})
+                                  </span>
+                                );
                               })()}
                             </span>
                           </div>
