@@ -1,7 +1,6 @@
-import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, ExternalLink } from 'lucide-react';
 import { Location } from '../lib/api';
 import { motion } from 'motion/react';
-import { cn } from '@/src/lib/utils';
 
 export interface LocationCardProps {
   location: Location;
@@ -10,21 +9,6 @@ export interface LocationCardProps {
 }
 
 export function LocationCard({ location, index }: LocationCardProps) {
-  const formatTime = (time: number | null) => {
-    if (time === null || time === 0) return 'Closed';
-    const hours = Math.floor(time / 100);
-    const minutes = time % 100;
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const displayHours = hours % 12 || 12;
-    const displayMinutes = minutes.toString().padStart(2, '0');
-    return `${displayHours}:${displayMinutes} ${ampm}`;
-  };
-
-  const getDayRange = (open: number | null, close: number | null) => {
-    if (open === null || close === null || (open === 0 && close === 0)) return 'Closed';
-    return `${formatTime(open)} - ${formatTime(close)}`;
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -54,9 +38,8 @@ export function LocationCard({ location, index }: LocationCardProps) {
             <div className="flex items-start gap-3">
               <MapPin size={18} className="text-brand-olive shrink-0 mt-0.5" />
               <div className="text-sm text-brand-brown/80 font-sans leading-tight">
-                <p className="font-medium text-brand-brown">{location.address_one}</p>
-                {location.address_two && <p>{location.address_two}</p>}
-                <p>{location.city}, {location.state} {location.zip_code}</p>
+                <p className="font-medium text-brand-brown">{location.address_one || 'Local Coffee Club'}</p>
+                <p>{location.city}, {location.state} {location.zip_code || ''}</p>
               </div>
             </div>
             
@@ -67,28 +50,13 @@ export function LocationCard({ location, index }: LocationCardProps) {
                   <span>{location.phone_number}</span>
                 </div>
               )}
-              <div className="flex items-start gap-3 text-sm text-brand-brown/80 font-sans">
-                <Clock size={16} className="text-brand-olive shrink-0 mt-0.5" />
-                <div className="flex flex-col gap-1">
-                  <p className="font-medium text-brand-brown">Hours</p>
-                  <p className="text-[11px] leading-tight">
-                    Mon-Thu: {getDayRange(location.hours_monday_open, location.hours_monday_close)}<br />
-                    Fri: {getDayRange(location.hours_friday_open, location.hours_friday_close)}<br />
-                    Sat: {getDayRange(location.hours_saturday_open, location.hours_saturday_close)}<br />
-                    Sun: {getDayRange(location.hours_sunday_open, location.hours_sunday_close)}
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         <div className="mt-6 md:mt-0 pt-4 flex items-center justify-between border-t border-brand-brown/5">
-          <span className={cn(
-            "text-[10px] font-bold uppercase tracking-widest font-sans",
-            location.hours_monday_open ? "text-brand-olive" : "text-red-500"
-          )}>
-            {location.hours_monday_open ? "Open Now" : "Hours Vary"}
+          <span className="text-[10px] font-bold uppercase tracking-widest font-sans text-brand-olive">
+            Open for Rituals
           </span>
           <button className="text-xs font-semibold underline underline-offset-4 text-brand-brown hover:text-brand-olive font-sans uppercase">
             Get Directions
