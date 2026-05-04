@@ -59,7 +59,8 @@ export function Footer() {
             </p>
             <form className="flex gap-2">
               <input 
-                type="email" 
+                type="text" 
+                inputMode="email"
                 placeholder="email address" 
                 className="flex-grow rounded-full bg-brand-cream/5 border border-brand-cream/10 px-4 py-2 text-sm font-sans focus:outline-none focus:border-brand-olive transition-colors"
               />

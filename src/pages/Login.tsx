@@ -143,7 +143,8 @@ export function Login() {
             </label>
             <input
               id="email"
-              type="email"
+              type="text"
+              inputMode="email"
               required
               placeholder="hello@example.com"
               value={email}
