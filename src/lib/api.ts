@@ -72,6 +72,7 @@ export async function fetchMenu(): Promise<MenuItem[]> {
           name: itemName,
           price: sizeOption.price,
           size: sizeOption.size,
+          calories: sizeOption.calories,
           category: (function() {
             const n = itemName.toLowerCase();
             if (n.includes('tea') || n.includes('chai')) return 'Tea';
