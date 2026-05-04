@@ -11,6 +11,11 @@ export interface MenuItem {
   calories?: number;
 }
 
+export interface LocationHours {
+  open: number | null;
+  close: number | null;
+}
+
 export interface Location {
   id: string;
   name: string;
@@ -20,6 +25,32 @@ export interface Location {
   state: string;
   zip_code?: string | number;
   phone_number?: string | null;
+  hours?: {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+  };
+}
+
+function formatTime(militaryTime: number | null): string {
+  if (militaryTime === null) return 'Closed';
+  if (militaryTime === 0) return '12:00 AM';
+  
+  const hours24 = Math.floor(militaryTime / 100);
+  const minutes = militaryTime % 100;
+  const ampm = hours24 >= 12 ? 'PM' : 'AM';
+  const hours12 = hours24 % 12 || 12;
+  
+  return `${hours12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+}
+
+function formatHoursBlock(h: LocationHours | undefined): string {
+  if (!h || h.open === null || h.close === null) return 'Closed';
+  return `${formatTime(h.open)} - ${formatTime(h.close)}`;
 }
 
 export async function fetchMenu(): Promise<MenuItem[]> {
@@ -75,8 +106,24 @@ export async function fetchLocations(): Promise<Location[]> {
     name: loc.city,
     city: loc.city,
     state: loc.state,
-    address_one: 'Local Coffee Club', // Placeholder since API lacks detailed address
-    zip_code: '',
-    phone_number: null
+    address_one: loc.address || 'Local Coffee Club',
+    address_two: loc.address_two,
+    zip_code: loc.zip_code || '',
+    phone_number: loc.phone_number ? (function() {
+      const p = loc.phone_number.replace(/\D/g, '');
+      if (p.length === 10) {
+        return `(${p.slice(0,3)}) ${p.slice(3,6)}-${p.slice(6)}`;
+      }
+      return loc.phone_number;
+    })() : null,
+    hours: loc.hours ? {
+      monday: formatHoursBlock(loc.hours.monday),
+      tuesday: formatHoursBlock(loc.hours.tuesday),
+      wednesday: formatHoursBlock(loc.hours.wednesday),
+      thursday: formatHoursBlock(loc.hours.thursday),
+      friday: formatHoursBlock(loc.hours.friday),
+      saturday: formatHoursBlock(loc.hours.saturday),
+      sunday: formatHoursBlock(loc.hours.sunday),
+    } : undefined
   }));
 }

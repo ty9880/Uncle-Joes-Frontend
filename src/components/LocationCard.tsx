@@ -1,4 +1,4 @@
-import { MapPin, Phone, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
 import { Location } from '../lib/api';
 import { motion } from 'motion/react';
 
@@ -39,24 +39,51 @@ export function LocationCard({ location, index }: LocationCardProps) {
               <MapPin size={18} className="text-brand-olive shrink-0 mt-0.5" />
               <div className="text-sm text-brand-brown/80 font-sans leading-tight">
                 <p className="font-medium text-brand-brown">{location.address_one || 'Local Coffee Club'}</p>
+                {location.address_two && <p>{location.address_two}</p>}
                 <p>{location.city}, {location.state} {location.zip_code || ''}</p>
               </div>
             </div>
             
-            <div className="flex flex-col gap-3">
-              {location.phone_number && (
-                <div className="flex items-center gap-3 text-sm text-brand-brown/80 font-sans">
-                  <Phone size={16} className="text-brand-olive shrink-0" />
-                  <span>{location.phone_number}</span>
-                </div>
-              )}
-            </div>
+              <div className="flex flex-col gap-3">
+                {location.phone_number && (
+                  <div className="flex items-center gap-3 text-sm text-brand-brown/80 font-sans">
+                    <Phone size={16} className="text-brand-olive shrink-0" />
+                    <span>{location.phone_number}</span>
+                  </div>
+                )}
+                
+                {location.hours && (
+                  <div className="flex items-start gap-3 text-sm text-brand-brown/80 font-sans">
+                    <Clock size={16} className="text-brand-olive shrink-0 mt-0.5" />
+                    <div className="flex flex-col gap-1">
+                      <p className="font-medium text-brand-brown">Hours</p>
+                      <div className="text-[11px] leading-tight flex flex-col gap-0.5">
+                        {location.hours.monday === location.hours.thursday && 
+                         location.hours.monday === location.hours.wednesday && 
+                         location.hours.monday === location.hours.tuesday ? (
+                          <p>Mon-Thu: {location.hours.monday}</p>
+                        ) : (
+                          <>
+                            <p>Mon: {location.hours.monday}</p>
+                            <p>Tue: {location.hours.tuesday}</p>
+                            <p>Wed: {location.hours.wednesday}</p>
+                            <p>Thu: {location.hours.thursday}</p>
+                          </>
+                        )}
+                        <p>Fri: {location.hours.friday}</p>
+                        <p>Sat: {location.hours.saturday}</p>
+                        <p>Sun: {location.hours.sunday}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
           </div>
         </div>
 
         <div className="mt-6 md:mt-0 pt-4 flex items-center justify-between border-t border-brand-brown/5">
           <span className="text-[10px] font-bold uppercase tracking-widest font-sans text-brand-olive">
-            Open for Rituals
+            Visit Today
           </span>
           <button className="text-xs font-semibold underline underline-offset-4 text-brand-brown hover:text-brand-olive font-sans uppercase">
             Get Directions
